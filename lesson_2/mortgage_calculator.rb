@@ -4,10 +4,10 @@ MESSAGES = YAML.load_file('mortgage_calc_msg.yml')
 LANGUAGE = 'en'
 
 def prompt(message)
-  Kernel.puts(message)
+  Kernel.puts("=>#{message}")
 end
 
-def messages(message, lang='en')
+def messages(message, lang = 'en')
   MESSAGES[lang][message]
 end
 
@@ -23,6 +23,14 @@ def valid_number?(input)
   integer?(input) || float?(input)
 end
 
+def check_number(varname)
+  if valid_number?(varname)
+    raise StopIteration
+  else
+    prompt(messages('not_valid_num', LANGUAGE))
+  end
+end
+
 prompt(messages('welcome', LANGUAGE))
 
 loop do # main loop
@@ -31,22 +39,15 @@ loop do # main loop
     prompt(messages('loan_amt', LANGUAGE))
     loan_amt = Kernel.gets.chomp
 
-    if valid_number?(loan_amt)
-      break
-    else
-      prompt(messages('not_valid_num', LANGUAGE))
-    end
+    check_number(loan_amt)
   end
 
+  apr_amt = ''
   loop do
     prompt(messages('APR_amt', LANGUAGE))
-    APR_amt = Kernel.gets.chomp
+    apr_amt = Kernel.gets.chomp
 
-    if valid_number?(APR_amt)
-      break
-    else
-      prompt(messages('not_valid_num', LANGUAGE))
-    end
+    check_number(apr_amt)
   end
 
   loan_duration = ''
@@ -54,14 +55,10 @@ loop do # main loop
     prompt(messages('loan_duration', LANGUAGE))
     loan_duration = Kernel.gets().chomp()
 
-    if valid_number?(loan_duration)
-      break
-    else
-      prompt(messages('not_valid_num', LANGUAGE))
-    end
+    check_number(loan_duration)
   end
 
-  annual_interest_rate = APR_amt.to_f() / 100
+  annual_interest_rate = apr_amt.to_f() / 100
   monthly_interest_rate = annual_interest_rate / 12
   months = loan_duration.to_i() * 12
 
@@ -72,7 +69,7 @@ loop do # main loop
   prompt("Your monthly payment is: $#{format('%02.2f', monthly_payment)}")
   prompt(messages('reset', LANGUAGE))
   answer = Kernel.gets().chomp()
-  break unless answer.downcase() == 'Y'
+  break unless answer.downcase().start_with?('y')
 end
 
 prompt(messages('goodbye_msg', LANGUAGE))

@@ -2,10 +2,10 @@
 
 en:
   welcome: "Welcome to Mortgage Calculator!"
-  load_amt: "Enter Your Loan Amount in $: "
+  loan_amt: "Enter Your Loan Amount in $: "
   not_valid_num: "That is not a valid number"
   APR_amt: "Enter Annual Percentage Rate in %: "
   loan_duration: "Enter Loan Duration (In Year): "
-  reset: "Would you like to use the mortgage calculator again? (Y/N)"
-  goodbye_msg: "Thank You for using Mortgagage Calculator!\nHave a nice day!"
+  reset: "Would you like to use the mortgage calculator again? (Type 'Y' to continue or any key to exit)"
+  goodbye_msg: "Thank You for using Mortgage Calculator!\nHave a nice day!"
 
