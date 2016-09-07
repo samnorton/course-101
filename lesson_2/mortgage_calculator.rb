@@ -23,14 +23,6 @@ def valid_number?(input)
   integer?(input) || float?(input)
 end
 
-def check_number(varname)
-  if valid_number?(varname)
-    raise StopIteration
-  else
-    prompt(messages('not_valid_num', LANGUAGE))
-  end
-end
-
 prompt(messages('welcome', LANGUAGE))
 
 loop do # main loop
@@ -39,7 +31,8 @@ loop do # main loop
     prompt(messages('loan_amt', LANGUAGE))
     loan_amt = Kernel.gets.chomp
 
-    check_number(loan_amt)
+    break if valid_number?(loan_amt)
+    prompt(messages('not_valid_num', LANGUAGE))
   end
 
   apr_amt = ''
@@ -47,7 +40,8 @@ loop do # main loop
     prompt(messages('APR_amt', LANGUAGE))
     apr_amt = Kernel.gets.chomp
 
-    check_number(apr_amt)
+    break if valid_number?(apr_amt)
+    prompt(messages('not_valid_num', LANGUAGE))
   end
 
   loan_duration = ''
@@ -55,7 +49,8 @@ loop do # main loop
     prompt(messages('loan_duration', LANGUAGE))
     loan_duration = Kernel.gets().chomp()
 
-    check_number(loan_duration)
+    break if valid_number?(loan_duration)
+    prompt(messages('not_valid_num', LANGUAGE))
   end
 
   annual_interest_rate = apr_amt.to_f() / 100
