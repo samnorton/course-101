@@ -8,7 +8,6 @@ def win?(first, second)
   (first == 'rock' && second == 'scissors') ||
     (first == 'paper' && second == 'rock') ||
     (first == 'scissors' && second == 'paper')
-    (first == 'scissors' && second == 'paper') ||
     (first == 'paper' && second == 'spock') ||
     (first == 'spock' && second == 'scissors') ||
     (first == 'lizard' && second == 'spock') ||
