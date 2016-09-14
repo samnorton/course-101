@@ -8,60 +8,49 @@ VALID_CHOICES = {
   'sp' => 'spock'
 }
 
+WINNING_COMBO = {
+  'r' => ['sc', 'l'],
+  'p' => ['r', 'sp'],
+  'sc' => ['p', 'l'],
+  'l' => ['sp', 'p'],
+  'sp' => ['sc', 'r']
+}
+
+
 def prompt(message)
   Kernel.puts("=>#{message}")
 end
 
-@player_count = 0
-@computer_count = 0
-@end_game = false
 
 def win?(first, second)
-  (first == 'r' && second == 'sc') ||
-    (first == 'p' && second == 'r') ||
-    (first == 'sc' && second == 'p') ||
-    (first == 'p' && second == 'sp') ||
-    (first == 'sp' && second == 'sc') ||
-    (first == 'l' && second == 'sp') ||
-    (first == 'r' && second == 'l') ||
-    (first == 'l' && second == 'p') ||
-    (first == 'sc' && second == 'l')
+  WINNING_COMBO[first].include?(second)
 end
+
+def clear_screen
+ system('clear') || system('cls')
+end
+
+player_count = 0
+computer_count = 0
 
 def display_results(player, computer)
   if win?(player, computer)
-    @player_count += 1
-    if @player_count == 5
-      @end_game = true
-      prompt("You have 5 wins! You won the game!")
-    else
-      prompt("You won this round!")
-    end
+    prompt("You won!")
   elsif win?(computer, player)
-    @computer_count += 1
-    if @computer_count == 5
-      @end_game = true
-      prompt("Computer have 5 wins! You loose this game!")
-    else
-      prompt("Computer won this round!")
-    end
+    prompt("Computer won! You loose!")
   else
     prompt("It's a tie! No one wins!")
   end
-
-  prompt("Player: #{@player_count}")
-  prompt("Computer: #{@computer_count}")
 end
 
-until @end_game
   loop do # main loop
     choice = ''
     loop do
       prompt("Choose a key:")
-      VALID_CHOICES.each do |k, v|
-        prompt("#{k} for #{v}")
+      VALID_CHOICES.each do |short_name, complete_name|
+        prompt("'#{short_name}' for #{short_name}")
       end
-      choice = Kernel.gets().chomp()
+      choice = Kernel.gets().chomp().downcase()
 
       if VALID_CHOICES.include?(choice)
         break
@@ -74,15 +63,21 @@ until @end_game
 
     display_results(choice, computer_choice)
     prompt("You chose: #{VALID_CHOICES[choice]}")
-    prompt("computer choose: #{VALID_CHOICES[computer_choice]}")
-    break unless @end_game == true
+    prompt("Computer choose: #{VALID_CHOICES[computer_choice]}")
 
-    prompt("Do you want to play again?")
+    prompt("Do you want to play again? ('yes' or 'no')")
+
+  loop do  
     answer = Kernel.gets().chomp()
-    break unless answer.downcase().start_with?('y')
-    @player_count = 0
-    @computer_count = 0
-    @end_game = false
+    if answer.casecmp('yes').zero?
+      break
+    elsif answer.casecmp('no').zero?
+      prompt("Thank you for playing!\n  Have a nice day! Good bye!")
+      exit
+    else
+      prompt("Please enter either 'yes' or 'no'.")
+    end
   end
-end
-prompt("Thank you for playing!\n Have a nice day! Good bye!")
+  end
+
+
