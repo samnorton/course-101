@@ -16,11 +16,9 @@ WINNING_COMBO = {
   'sp' => ['sc', 'r']
 }
 
-
 def prompt(message)
   Kernel.puts("=>#{message}")
 end
-
 
 def win?(first, second)
   WINNING_COMBO[first].include?(second)
@@ -30,25 +28,38 @@ def clear_screen
  system('clear') || system('cls')
 end
 
-player_count = 0
-computer_count = 0
+counts = {player: 0, computer: 0}
 
-def display_results(player, computer)
-  if win?(player, computer)
-    prompt("You won!")
-  elsif win?(computer, player)
-    prompt("Computer won! You loose!")
-  else
-    prompt("It's a tie! No one wins!")
-  end
+
+def display_results(player, computer, counts)
+  prompt(
+    case
+    when counts[:player] == 5 then "MESSAGE: You won the game! Congrats!"
+    when counts[:computer] == 5 then "MESSAGE:  Computer won the game. Try again?"
+    when win?(player, computer) then "MESSAGE:  You won this round!"
+    when win?(computer, player) then "MESSAGE:  Computer won this round! You loose!"
+    else "MESSAGE:  It's a tie on this round! No one wins!"
+    end
+  )
 end
+
+def count_wins(player, computer, counts)
+    if win?(player, computer)
+      counts[:player] += 1
+    elsif win?(computer, player)
+      counts[:computer] += 1
+    end
+    prompt("Player Count: #{counts[:player]}")
+    prompt("Computer Count: #{counts[:computer]}")
+end
+
 
   loop do # main loop
     choice = ''
     loop do
       prompt("Choose a key:")
       VALID_CHOICES.each do |short_name, complete_name|
-        prompt("'#{short_name}' for #{short_name}")
+        prompt("'#{short_name}' for #{complete_name}")
       end
       choice = Kernel.gets().chomp().downcase()
 
@@ -60,12 +71,20 @@ end
     end
 
     computer_choice = VALID_CHOICES.keys.sample
-
-    display_results(choice, computer_choice)
     prompt("You chose: #{VALID_CHOICES[choice]}")
     prompt("Computer choose: #{VALID_CHOICES[computer_choice]}")
 
+
+    if counts[:player] > 5 || counts[:computer] > 5
+      counts = {player: 0, computer: 0}
+      break
+    else
+    count_wins(choice, computer_choice, counts)
+    end
+
+    display_results(choice, computer_choice, counts)
     prompt("Do you want to play again? ('yes' or 'no')")
+    
 
   loop do  
     answer = Kernel.gets().chomp()
@@ -78,6 +97,7 @@ end
       prompt("Please enter either 'yes' or 'no'.")
     end
   end
+    clear_screen
   end
-
+    
 
