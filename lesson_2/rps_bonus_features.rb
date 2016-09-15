@@ -92,4 +92,4 @@ loop do # main loop
   end
   clear_screen
 end
-prompt("Thank you for playing!")
+
