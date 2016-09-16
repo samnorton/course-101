@@ -31,14 +31,14 @@ end
 counts = { player: 0, computer: 0 }
 
 def display_results(player, computer, counts)
-  prompt(
-    if counts[:player] == 5 then "MSG: You won this game! (5 wins)!"
-    elsif counts[:computer] == 5 then "MSG: Computer won this game! (5 wins)"
-    elsif win?(player, computer) then "MSG: You won this round!"
-    elsif win?(computer, player) then "MSG: Computer won this round! You loose!"
-    else "MSG: It's a tie on this round! No one wins!"
+  message =
+    if counts[:player] == 5 then "You won this game! (5 wins)!"
+    elsif counts[:computer] == 5 then "Computer won this game! (5 wins)"
+    elsif win?(player, computer) then "You won this round!"
+    elsif win?(computer, player) then "Computer won this round! You lose!"
+    else "It's a tie on this round! No one wins!"
     end
-  )
+  prompt("MSG: #{message}")
 end
 
 def count_wins(player, computer, counts)
@@ -92,4 +92,3 @@ loop do # main loop
   end
   clear_screen
 end
-
